@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-sanitize.min.js"></script>
+<script>
+    angular.module("myApp", ["ngSanitize"])
+        .controller("myController",
+        [
+            function () {
+                var self = this;
+
+                self.user = {
+                    firstName: "Johnny",
+                    lastName: "Chuang"
+                };
+
+                self.product = {
+                    name: "&lt;Dell XPS 15 9550&gt;",
+                    description: "<h1>超好用</h1>"
+                };
+            }
+        ]);
+</script>
+
+<h2>Index</h2>
+<div ng-app="myApp" ng-controller="myController as myCtrl">
+    <p>
+        <h3>ngBind</h3>
+        <span ng-bind="myCtrl.user.firstName"></span>
+        <span ng-bind="myCtrl.user.lastName"></span>
+    </p>
+    <p>
+        <h3 ng-non-bindable>{{}}</h3>
+        <span>{{ myCtrl.user.firstName }}</span>
+        <span>{{ myCtrl.user.lastName }}</span>
+    </p>
+    <p>
+        <h3>ngBindHtml</h3>
+        <span ng-bind-html="myCtrl.product.name"></span>
+        <span ng-bind-html="myCtrl.product.description"></span>
+    </p>
+    <p>
+        <h3>ngBindTemplate</h3>
+        <span ng-bind-template="My name is {{ myCtrl.user.firstName }}, {{ myCtrl.user.lastName }}."></span>
+    </p>
+</div>
