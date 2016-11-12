@@ -1,3 +1,3 @@
 # angularjs.samples
 
-- `ngBind`、`{{}}`、`ngBindHtml`、`ngBindTemplate` samples.
+- `ngModel` samples.
