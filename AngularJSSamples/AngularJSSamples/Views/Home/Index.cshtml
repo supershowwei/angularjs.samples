@@ -1,23 +1,23 @@
-﻿@{
+﻿@using AngularJSSamples.Extensions
+@{
     ViewBag.Title = "Index";
 }
 <script src="~/Scripts/angular.min.js"></script>
-<script src="~/Scripts/angular-sanitize.min.js"></script>
 <script>
-    angular.module("myApp", ["ngSanitize"])
+    angular.module("myApp", [])
         .controller("myController",
         [
-            function () {
+            "$http",
+            function ($http) {
                 var self = this;
 
-                self.user = {
-                    firstName: "Johnny",
-                    lastName: "Chuang"
-                };
+                self.user = @Html.Raw(ObjectExtension.SerializeToJson(ViewBag.User, true));
 
-                self.product = {
-                    name: "&lt;Dell XPS 15 9550&gt;",
-                    description: "<h1>超好用</h1>"
+                self.save = function () {
+                    $http.post("/Home/Save", self.user.modified)
+                        .then(function success(response) {
+                            console.log(response);
+                        });
                 };
             }
         ]);
@@ -26,22 +26,18 @@
 <h2>Index</h2>
 <div ng-app="myApp" ng-controller="myController as myCtrl">
     <p>
-        <h3>ngBind</h3>
-        <span ng-bind="myCtrl.user.firstName"></span>
-        <span ng-bind="myCtrl.user.lastName"></span>
+    <h3>ngModel</h3>
+    <p>
+        <label>Id: </label><span ng-bind="myCtrl.user.id"></span><br/>
+        <label>First Name: </label><input type="text" id="firstName" ng-model="myCtrl.user.modified.firstName"/><br/>
+        <label>Last Name: </label><input type="text" id="lastName" ng-model="myCtrl.user.modified.lastName"/><br/>
+        <label>Age: </label><input type="text" id="age" ng-model="myCtrl.user.modified.age"/>
     </p>
     <p>
-        <h3 ng-non-bindable>{{ }}</h3>
-        <span>{{ myCtrl.user.firstName }}</span>
-        <span>{{ myCtrl.user.lastName }}</span>
+        <span ng-bind="myCtrl.user.modified.firstName"></span>
+        <span ng-bind="myCtrl.user.modified.lastName"></span>, <span ng-bind="myCtrl.user.modified.age"></span> years old.
     </p>
     <p>
-        <h3>ngBindHtml</h3>
-        <span ng-bind-html="myCtrl.product.name"></span>
-        <span ng-bind-html="myCtrl.product.description"></span>
-    </p>
-    <p>
-        <h3>ngBindTemplate</h3>
-        <span ng-bind-template="My name is {{ myCtrl.user.firstName }}, {{ myCtrl.user.lastName }}."></span>
+        <input id="save" type="button" value="Save" ng-click="myCtrl.save()"/>
     </p>
 </div>
